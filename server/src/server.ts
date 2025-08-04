@@ -33,9 +33,8 @@ let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
 let hasDiagnosticRelatedInformationCapability = false;
 
-
-// Warning: this variable mix all workspace TreeSitter node_types 
-let node_types_mixed : CompletionItem[] = []
+// Warning: this variable mix all workspace TreeSitter node_types
+let node_types_mixed: CompletionItem[] = [];
 
 connection.onInitialize((params: InitializeParams) => {
   const capabilities = params.capabilities;
@@ -70,29 +69,31 @@ connection.onInitialize((params: InitializeParams) => {
 
     for (let uri of ws_uris) {
       let p = path.join(url.fileURLToPath(uri), "src", "node-types.json");
-      let f = fs.readFileSync(p);
+      try {
+        let f = fs.readFileSync(p);
 
-      // incomplete definition for TreeSitter node_types.json
-      type node_type = {
-        type: string;
-        named: boolean;
-        subtypes: node_type[]; // not need iterate this
-      };
-      let node_types: node_type[] = JSON.parse(f.toString());
-      let set: Set<string> = new Set();
+        // incomplete definition for TreeSitter node_types.json
+        type node_type = {
+          type: string;
+          named: boolean;
+          subtypes: node_type[]; // not need iterate this
+        };
+        let node_types: node_type[] = JSON.parse(f.toString());
+        let set: Set<string> = new Set();
 
-      for (let node of node_types) {
-        set.add(node.type);
+        for (let node of node_types) {
+          set.add(node.type);
+        }
+        for (let name of set) {
+          node_types_mixed.push({
+            label: name,
+            kind: CompletionItemKind.Constructor,
+            detail: "TreeSitter Node type",
+          });
+        }
+      } catch (e) {
+        console.log(e);
       }
-			for (let name of set) {
-				node_types_mixed.push({
-					label:name,
-					kind: CompletionItemKind.Constructor,
-					detail: "TreeSitter Node type"
-
-				})
-			}
-      
     }
   }
 
@@ -201,8 +202,8 @@ connection.onCompletion((comp_item: CompletionParams): CompletionItem[] => {
     if (ch == "#") {
       return pred_items;
     } else {
-			return node_types_mixed;
-		}
+      return node_types_mixed;
+    }
   } else {
     return [];
   }
