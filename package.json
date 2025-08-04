@@ -6,25 +6,36 @@
   "engines": {
     "vscode": "^1.75.0"
   },
-	
+  "repository": {
+    "url": "https://github.com/illusory0x0/tree-sitter-query-completion",
+    "type": "git"
+  },
   "activationEvents": [
     "onLanguage:plaintext"
   ],
   "main": "./client/out/extension",
   "contributes": {
-		"languages": [
-			{
-				"id": "tree-sitter-query",
-				"extensions": [".scm"],
-				"filenames": [ "folds.scm", "highlights.scm", "indents.scm", "injections.scm", "locals.scm", "tags.scm", "textobjects.scm" ],
-				"icon": {
-					"dark": "./icon/tree-sitter.png",
-					"light": "./icon/tree-sitter.png"
-				}
-
-			}
-		],
-
+    "languages": [
+      {
+        "id": "tree-sitter-query",
+        "extensions": [
+          ".scm"
+        ],
+        "filenames": [
+          "folds.scm",
+          "highlights.scm",
+          "indents.scm",
+          "injections.scm",
+          "locals.scm",
+          "tags.scm",
+          "textobjects.scm"
+        ],
+        "icon": {
+          "dark": "./icon/tree-sitter.png",
+          "light": "./icon/tree-sitter.png"
+        }
+      }
+    ],
     "configuration": {
       "type": "object",
       "title": "Tree Sitter Query configuration",
